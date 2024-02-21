@@ -1,15 +1,29 @@
 use macroquad::prelude::*;
 
+struct Walker {
+    x: f32,
+    y: f32,
+}
+
 #[macroquad::main("Chapter 1")]
 async fn main() {
+    let w = screen_width() as usize;
+    let h = screen_height() as usize;
+
+    let mut framebuffer = Image::gen_image_color(w as u16, h as u16, BLACK);
+    let texture = Texture2D::from_image(&framebuffer);
+
     loop {
-        clear_background(RED);
+        clear_background(BLACK);
 
-        draw_line(40.0, 40.0, 100.0, 200.0, 15.0, BLUE);
-        draw_rectangle(screen_width() / 2.0 - 60.0, 100.0, 120.0, 60.0, GREEN);
-        draw_circle(screen_width() - 30.0, screen_height() - 30.0, 15.0, YELLOW);
+        for i in 0..100 {
+            for j in 0..100 {
+                framebuffer.set_pixel(i, j, RED);
+            }
+        }
 
-        draw_text("IT WORKS!", 20.0, 20.0, 30.0, DARKGRAY);
+        texture.update(&framebuffer);
+        draw_texture(&texture, 0., 0., WHITE);
 
         next_frame().await
     }
